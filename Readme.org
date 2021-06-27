@@ -1,0 +1,44 @@
+* Neural Style Transfer
+
+[[https://colab.research.google.com/drive/1iV_-zZ1NXEGMCApWwzM0ZxuCST2Gij1F][Colab]]
+
+** Resources
+- [[https://www.youtube.com/watch?v=R39tWYYKNcI][C4W4L06 What is neural style transfer?]]
+- [[https://towardsdatascience.com/light-on-math-machine-learning-intuitive-guide-to-neural-style-transfer-ef88e46697ee][Intuitive Guide to Neural Style Transfer]]
+
+*** Code Resources
+- https://pytorch.org/tutorials/advanced/neural_style_tutorial.html?highlight=neural%20style
+- https://techyhans.com/neural-style-transfer/
+
+*** Video
+- https://www.youtube.com/watch?v=imX4kSKDY7s
+- https://www.youtube.com/playlist?list=PLBoQnSflObcmbfshq9oNs41vODgXG-608
+
+*** Paper
+- [[https://arxiv.org/abs/1508.06576][A Neural Algorithm of Artistic Style, Leon A. Gatys, Alexander S. Ecker, Matthias Bethge]]
+
+** Notes
+
+- C is the Content image
+- S is the Style image
+- G is the Generated image
+- Pseudo Plan
+    - create a forward pass function or classs to get the C and S activation in layer l
+    - initial look into single layer later look into mutiple layer
+    - Cost = Content cost and style cost
+    - content cost = l2 norm of the activation in layer l
+    - $$ L^l_{content}(p, x) = \sum_{i, j} (F^l_{ij}(x) - P^l_{ij}(p))^2 $$
+    - style cost = we need gram  matrix
+    - what is gram matrix
+    - create style only
+    - create content only
+
+***Before we neural syle transfer we should have clear understanding
+about the computation made by the conv layers***
+
+** Implementation Detail
+*** Images
+| *Content*       | *Style*      |
+|---------------+------------|
+| [[./husky_1.jpg]] | [[./gogh.jpg]] |
+
