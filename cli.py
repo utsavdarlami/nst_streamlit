@@ -10,7 +10,7 @@ from torch.utils.tensorboard import SummaryWriter
 
 if __name__ == "__main__":
     available_device = "cuda" if torch.cuda.is_available() else "cpu"
-    print(f"{available_device} is available")
+    print(f"{available_device}, is available")
     # device
     device = torch.device(device=available_device)
 
@@ -24,9 +24,13 @@ if __name__ == "__main__":
     content = Image.open(content_path)
     style = Image.open(style_path)
 
+    rgb_mean = torch.tensor([0.485, 0.456, 0.406])
+    rgb_std = torch.tensor([0.229, 0.224, 0.225])
+
     transformImage2Tensor = transforms.Compose([
         transforms.Resize((224, 224)),
-        transforms.ToTensor()
+        transforms.ToTensor(),
+        transforms.Normalize(mean=rgb_mean, std=rgb_std)
     ])
 
     content_tensor = transformImage2Tensor(content).unsqueeze(0).to(device)
@@ -43,7 +47,7 @@ if __name__ == "__main__":
                                            style_tensor,
                                            layer_to_watch,
                                            alpha=1,
-                                           beta=0.1,
+                                           beta=1e-3,
                                            lr=0.4,
                                            iteration=600,
                                            device=device,
@@ -58,10 +62,20 @@ if __name__ == "__main__":
                         # .permute(1, 2, 0).clamp(max=1, min=0))
         # plt.imshow(image_gen)
         # plt.show()
-        writer.add_image('final generated image', out_image.squeeze(), 0)
+        img = out_image.squeeze().cpu()
+        img = torch.clamp(img.permute(1, 2, 0) * rgb_std + rgb_mean, 0, 1)
+        writer.add_image('final generated image', img.permute(2, 0, 1), 0)
 
 
     # log_tensor = torch.stack(generation_lists)
     # show_grid_tensor(log_tensor, n=6)
     writer.close()
+
+    img = out_image[0].cpu()
+
+    img = torch.clamp(img.permute(1, 2, 0) * rgb_std + rgb_mean, 0, 1)
+
+    pil_img = transforms.ToPILImage()(img.permute(2, 0, 1))
+
+    pil_img.save("generated_img.png")
     print("DOne")
