@@ -4,7 +4,6 @@ from torch import nn, optim
 # import torch.nn.functional as F
 import torchvision
 from torchvision.utils import save_image
-
 from collections import OrderedDict
 from tqdm import tqdm
 
@@ -85,6 +84,7 @@ def gram_matrix(in_):
     G = torch.mm(features, features.t())
     return G
 
+
 def compute_style_loss(style_activation, generate_activation, layer_to_watch):
     # gram_matrix_style = OrderedDict()
     # gram_matrix_generate = OrderedDict()
@@ -93,7 +93,7 @@ def compute_style_loss(style_activation, generate_activation, layer_to_watch):
         gram_matrix_style = gram_matrix(style_activation[l]) #.detach()
         gram_matrix_generate = gram_matrix(generate_activation[l]) #.detach()
 
-        # l2 norm or mse 
+        # l2 norm or mse
         s_loss += torch.mean((gram_matrix_generate - gram_matrix_style) ** 2)
 
         # el = F.mse_loss(gram_matrix_style[style_l] , gram_matrix_generate[style_l])
@@ -108,7 +108,8 @@ def transfer(model, generate_tensor,
              alpha=1, beta=0.1,
              lr=1, iteration=30,
              device=torch.device(device='cpu'),
-             st_bar=None):
+             st_bar=None,
+             writer=None):
     """Transfering function."""
     saved_tensor_lists = []
     generate_tensor.requires_grad = True
@@ -151,15 +152,24 @@ def transfer(model, generate_tensor,
 
         loop.set_description(f"Epoch [{i + 1}/{iteration}]")
         loop.set_postfix(loss=loss.item())
-        if st_bar is not None:
+        if st_bar:
             st_bar.progress((i+1)/iteration)
         if i % 100 == 0:
             # save_image(generate_tensor,
                        # "generated/generated_gogh_224_" + str(i) + ".png")
-            saved_tensor_lists.append(generate_tensor.clone().
-                                      detach().cpu().squeeze())
+            # saved_tensor_lists.append(generate_tensor.clone().
+            #                           detach().cpu().squeeze())
+
+            # image_tensor =  generate_tensor.clone().detach().cpu().squeeze()
+            # image_to_log = image_tensor.permute(1, 2, 0).clamp(max=1, min=0)
+            if writer:
+                writer.add_image('images', generate_tensor.squeeze(), i)
+                # writer.add_graph(model, images)
 
         optimizer.step(closure)
+
+    # if writer:
+        # writer.close()
 
     generate_tensor.requires_grad = False
     return generate_tensor, saved_tensor_lists
