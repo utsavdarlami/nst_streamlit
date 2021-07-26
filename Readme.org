@@ -35,10 +35,10 @@
 
 ** Usage
 *** Cli 
-- ~$python cli.py <content_img_path> <style_img_path>~
+- ~python cli.py <content_img_path> <style_img_path>~
 *** Streamlit
 - Install streamlit 
-- ~$streamlit run app.py~
+- ~streamlit run app.py~
 ** Implementation Detail
 *** Images
 | *Content*       | *Style*      |
