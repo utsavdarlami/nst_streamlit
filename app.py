@@ -3,7 +3,7 @@ import streamlit as st
 from PIL import Image
 import torch
 from torchvision import transforms
-from nst import VGG_Activation, transfer
+from src.nst import VGG_Activation, transfer
 
 
 def image_uploaders():

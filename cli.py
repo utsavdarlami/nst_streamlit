@@ -1,11 +1,11 @@
-"""Running the nst."""
+"""Running the nst in command line."""
 import torch
 from torchvision import transforms
 from PIL import Image
 import matplotlib.pyplot as plt
 import sys
-from nst import transfer, VGG_Activation
-from utils import show_grid_tensor
+from src.nst import transfer, VGG_Activation
+from src.utils import show_grid_tensor
 from torch.utils.tensorboard import SummaryWriter
 
 if __name__ == "__main__":

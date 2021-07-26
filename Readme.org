@@ -27,18 +27,27 @@
     - initial look into single layer later look into mutiple layer
     - Cost = Content cost and style cost
     - content cost = l2 norm of the activation in layer l
-    - $$ L^l_{content}(p, x) = \sum_{i, j} (F^l_{ij}(x) - P^l_{ij}(p))^2 $$
+      - $$ L^l_{content}(p, x) = \sum_{i, j} (F^l_{ij}(x) - P^l_{ij}(p))^2 $$
     - style cost = we need gram  matrix
     - what is gram matrix
     - create style only
     - create content only
 
-***Before we neural syle transfer we should have clear understanding
-about the computation made by the conv layers***
-
+** Usage
+*** Cli 
+- ~$python cli.py <content_img_path> <style_img_path>~
+*** Streamlit
+- Install streamlit 
+- ~$streamlit run app.py~
 ** Implementation Detail
 *** Images
 | *Content*       | *Style*      |
 |---------------+------------|
 | [[./husky_1.jpg]] | [[./gogh.jpg]] |
 
+**** Generated Image 
+- with alpha=1, beta=1e-3, tv weight=10,
+- optimizer='lbfgs',
+- learning rate=0.4, iteration=600,  
+
+[[./generated_img.png]]

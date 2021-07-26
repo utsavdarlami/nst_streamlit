@@ -182,7 +182,7 @@ def transfer(model, generate_tensor,
             if writer:
                 img = generate_tensor.clone().squeeze().cpu()
                 img = torch.clamp(img.permute(1, 2, 0) * rgb_std + rgb_mean,
-                                0, 1)
+                                  0, 1)
 
                 writer.add_image('images', img.permute(2, 0, 1), i)
                 # writer.add_graph(model, images)
